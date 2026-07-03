@@ -21,8 +21,16 @@ app.register_blueprint(auth_bp)
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 
 @app.route('/', methods=['GET'])
+def welcome():
+    """Render welcome page."""
+    from flask import session, redirect, url_for, render_template
+    if session.get('user_id') is not None:
+        return redirect(url_for('home'))
+    return render_template('welcome.html')
+
+@app.route('/home', methods=['GET'])
 @login_required
-def index():
+def home():
     """Render landing page."""
     import json
     import os

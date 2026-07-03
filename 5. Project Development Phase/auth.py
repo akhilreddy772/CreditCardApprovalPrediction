@@ -9,20 +9,14 @@ def login_required(view):
     @functools.wraps(view)
     def wrapped_view(**kwargs):
         if session.get('user_id') is None:
-            return redirect(url_for('auth.welcome'))
+            return redirect(url_for('welcome'))
         return view(**kwargs)
     return wrapped_view
-
-@auth_bp.route('/welcome')
-def welcome():
-    if session.get('user_id') is not None:
-        return redirect(url_for('index'))
-    return render_template('welcome.html')
 
 @auth_bp.route('/signup', methods=('GET', 'POST'))
 def signup():
     if session.get('user_id') is not None:
-        return redirect(url_for('index'))
+        return redirect(url_for('home'))
 
     if request.method == 'POST':
         fullname = request.form.get('fullname')
@@ -63,7 +57,7 @@ def signup():
 @auth_bp.route('/login', methods=('GET', 'POST'))
 def login():
     if session.get('user_id') is not None:
-        return redirect(url_for('index'))
+        return redirect(url_for('home'))
 
     if request.method == 'POST':
         identifier = request.form.get('identifier')
@@ -87,7 +81,7 @@ def login():
             session['fullname'] = user['fullname']
             if request.form.get('remember'):
                 session.permanent = True
-            return redirect(url_for('index'))
+            return redirect(url_for('home'))
             
         flash(error, 'error')
         
@@ -96,7 +90,7 @@ def login():
 @auth_bp.route('/logout')
 def logout():
     session.clear()
-    return redirect(url_for('auth.welcome'))
+    return redirect(url_for('welcome'))
 
 @auth_bp.route('/forgot-password')
 def forgot_password():
