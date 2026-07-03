@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics Dashboard - Credit Predict</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <div class="container fade-in-up">
+        <!-- Navigation bar -->
+        <nav class="navbar">
+            <div class="nav-container">
+                <a href="/" class="nav-brand">💳 CreditPredict</a>
+                <div class="nav-links">
+                    <a href="/" class="nav-link">Home</a>
+                    <a href="/dashboard" class="nav-link active">Dashboard</a>
+                    <a href="/batch-predict" class="nav-link">Batch Predict</a>
+                    <a href="/model-comparison" class="nav-link">Model Comparison</a>
+                </div>
+            </div>
+        </nav>
+
+        <div class="header">
+            <h1>Analytics &amp; Insights Dashboard</h1>
+            <p>A comprehensive overview of training distribution, demographic metrics, and model benchmarks.</p>
+        </div>
+
+        <!-- ─── Summary Stat Cards ───────────────────────── -->
+        <div class="stat-cards">
+            <div class="stat-card accent-indigo">
+                <span class="stat-icon">📊</span>
+                <span class="stat-value">{{ dash_meta.total_applicants if dash_meta else '36,457' }}</span>
+                <span class="stat-label">Total Applicants</span>
+            </div>
+            <div class="stat-card accent-indigo">
+                <span class="stat-icon">🏆</span>
+                <span class="stat-value" style="font-size:1.1rem;">{{ dash_meta.best_model if dash_meta else 'Random
+                    Forest' }}</span>
+                <span class="stat-label">Best Model</span>
+            </div>
+            <div class="stat-card accent-emerald">
+                <span class="stat-icon">✅</span>
+                <span class="stat-value">{{ dash_meta.accuracy if dash_meta else '95.82%' }}</span>
+                <span class="stat-label">Accuracy</span>
+            </div>
+            <div class="stat-card accent-indigo">
+                <span class="stat-icon">🔬</span>
+                <span class="stat-value">{{ dash_meta.algorithms_compared if dash_meta else 4 }}</span>
+                <span class="stat-label">Algorithms Compared</span>
+            </div>
+        </div>
+        <!-- ─────────────────────────────────────────────── -->
+
+        <div class="dashboard-grid">
+            <div class="chart-card">
+                <h3>Target Class Imbalance</h3>
+                <img src="{{ url_for('static', filename='images/class_imbalance.png') }}" class="chart-img"
+                    alt="Target class approved vs rejected count">
+            </div>
+
+            <div class="chart-card">
+                <h3>Model Comparison</h3>
+                <img src="{{ url_for('static', filename='images/model_comp.png') }}" class="chart-img"
+                    alt="Model comparison accuracy/precision/recall/f1">
+            </div>
+
+            <div class="chart-card">
+                <h3>Age Distribution</h3>
+                <img src="{{ url_for('static', filename='images/age_dist.png') }}" class="chart-img"
+                    alt="Age Distribution of Applicants">
+            </div>
+
+            <div class="chart-card">
+                <h3>Income Distribution</h3>
+                <img src="{{ url_for('static', filename='images/income_dist.png') }}" class="chart-img"
+                    alt="Income Distribution representation">
+            </div>
+        </div>
+
+        <div class="nav-actions mt-4">
+            <a href="/" class="btn-secondary">← Back to Prediction Form</a>
+        </div>
+
+        <footer class="site-footer">
+            <strong>CreditPredict &copy; 2026</strong>
+            <div class="footer-tech">Built with Python, Flask, Scikit-learn, XGBoost, SHAP, Bootstrap 5</div>
+        </footer>
+    </div>
+</body>
+
+</html>

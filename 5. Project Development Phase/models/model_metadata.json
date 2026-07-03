@@ -1,0 +1,44 @@
+{
+  "best_model_name": "Random Forest",
+  "training_samples": 36457,
+  "algorithms_compared": 4,
+  "metrics": {
+    "accuracy": 0.9582,
+    "precision": 0.1796,
+    "recall": 0.4146,
+    "f1": 0.2506,
+    "roc_auc": 0.7968
+  },
+  "features": [
+    "CODE_GENDER",
+    "FLAG_OWN_CAR",
+    "FLAG_OWN_REALTY",
+    "CNT_CHILDREN",
+    "AMT_INCOME_TOTAL",
+    "NAME_INCOME_TYPE",
+    "NAME_EDUCATION_TYPE",
+    "NAME_FAMILY_STATUS",
+    "NAME_HOUSING_TYPE",
+    "FLAG_WORK_PHONE",
+    "FLAG_PHONE",
+    "FLAG_EMAIL",
+    "OCCUPATION_TYPE",
+    "CNT_FAM_MEMBERS",
+    "AGE",
+    "YEARS_EMPLOYED",
+    "HAS_CHILDREN",
+    "FAMILY_SIZE_CATEGORY",
+    "IS_WORKING_AGE",
+    "AGE_GROUP",
+    "INCOME_PER_FAMILY_MEMBER",
+    "INCOME_GROUP",
+    "EMPLOYMENT_CATEGORY"
+  ],
+  "risk_threshold": 0.945866,
+  "threshold_metrics": {
+    "accuracy": 0.9742,
+    "precision": 0.2556,
+    "recall": 0.2764,
+    "f1": 0.2656
+  }
+}

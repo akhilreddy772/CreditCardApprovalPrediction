@@ -1,0 +1,14 @@
+# Environments
+.venv/
+venv/
+
+# Python caching
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Do NOT exclude models or datasets
+# (Ensure they are explicitly kept or not ignored)
+!models/*.pkl
+!models/*.json
+!dataset/*.csv

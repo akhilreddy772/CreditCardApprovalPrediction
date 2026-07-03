@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Model Comparison - Credit Predict</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <div class="container fade-in-up">
+        <!-- Navigation bar -->
+        <nav class="navbar">
+            <div class="nav-container">
+                <a href="/" class="nav-brand">💳 CreditPredict</a>
+                <div class="nav-links">
+                    <a href="/" class="nav-link">Home</a>
+                    <a href="/dashboard" class="nav-link">Dashboard</a>
+                    <a href="/batch-predict" class="nav-link">Batch Predict</a>
+                    <a href="/model-comparison" class="nav-link active">Model Comparison</a>
+                </div>
+            </div>
+        </nav>
+
+        <div class="header">
+            <h1>Model Benchmarking & Comparison</h1>
+            <p>Evaluation of Logistic Regression, Decision Trees, Random Forests, and XGBoost models on the unseen
+                holdout dataset.</p>
+        </div>
+
+        <div class="form-section">
+            <h2>Model Performance Metrics</h2>
+            <p class="section-subtext">The metrics reflect classification performance for predicting credit risk (target
+                class 1). Due to significant class imbalance (~1.7% minority rate), F1-score and Precision are crucial
+                benchmarks alongside standard accuracy.</p>
+
+            <div class="comparison-table-wrapper">
+                <table class="comparison-table">
+                    <thead>
+                        <tr>
+                            <th>Model Name</th>
+                            <th>Accuracy</th>
+                            <th>Precision</th>
+                            <th>Recall</th>
+                            <th>F1-Score</th>
+                            <th>ROC-AUC</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="highlight-row">
+                            <td>Random Forest (Selected)</td>
+                            <td>95.82%</td>
+                            <td>17.96%</td>
+                            <td>41.46%</td>
+                            <td>25.06%</td>
+                            <td>79.68%</td>
+                        </tr>
+                        <tr>
+                            <td>XGBoost</td>
+                            <td>94.64%</td>
+                            <td>14.55%</td>
+                            <td>44.72%</td>
+                            <td>21.96%</td>
+                            <td>74.61%</td>
+                        </tr>
+                        <tr>
+                            <td>Decision Tree</td>
+                            <td>95.50%</td>
+                            <td>17.04%</td>
+                            <td>43.09%</td>
+                            <td>24.42%</td>
+                            <td>70.07%</td>
+                        </tr>
+                        <tr>
+                            <td>Logistic Regression</td>
+                            <td>58.64%</td>
+                            <td>2.12%</td>
+                            <td>52.03%</td>
+                            <td>4.07%</td>
+                            <td>56.57%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="chart-card" style="grid-column: 1 / -1;">
+                <h3>Confusion Matrix (Random Forest)</h3>
+                <p class="section-subtext" style="margin-bottom: 1rem;">Visually illustrates True Positives, False
+                    Positives, True Negatives, and False Negatives, demonstrating model error distributions.</p>
+                <img src="{{ url_for('static', filename='images/confusion_matrix.png') }}" class="chart-img"
+                    style="max-width: 550px;" alt="Confusion Matrix plot">
+            </div>
+        </div>
+
+        <div class="nav-actions mt-4">
+            <a href="/" class="btn-secondary">← Back to Prediction Form</a>
+        </div>
+
+        <footer class="site-footer">
+            <strong>CreditPredict &copy; 2026</strong>
+            <div class="footer-tech">Built with Python, Flask, Scikit-learn, XGBoost, SHAP, Bootstrap 5</div>
+        </footer>
+    </div>
+</body>
+
+</html>

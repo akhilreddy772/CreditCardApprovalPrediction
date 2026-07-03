@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result - CreditPredict</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .gauge-bar {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            animation: gauge-fill 1.5s ease-out forwards;
+        }
+    </style>
+</head>
+
+
+<body>
+    <div class="result-container fade-in-up">
+        <nav class="navbar">
+            <div class="nav-container">
+                <a href="/" class="nav-brand">💳 CreditPredict</a>
+                <div class="nav-links">
+                    <a href="/" class="nav-link">Home</a>
+                    <a href="/dashboard" class="nav-link">Dashboard</a>
+                    <a href="/batch-predict" class="nav-link">Batch Predict</a>
+                    <a href="/model-comparison" class="nav-link">Model Comparison</a>
+                </div>
+            </div>
+        </nav>
+
+        <div class="result-header">
+            <h1>Application Result</h1>
+            <p>Based on our robust Random Forest classification model</p>
+        </div>
+
+        <div class="result-card {% if result.is_approved %}approved{% else %}rejected{% endif %}">
+            <h2 class="result-status">
+                {% if result.is_approved %}
+                🎉 APPROVED
+                {% else %}
+                🛑 REJECTED
+                {% endif %}
+            </h2>
+
+            <div class="gauge-wrapper">
+                <div class="gauge-bar"
+                    style="background: conic-gradient({% if result.is_approved %}var(--color-emerald){% else %}var(--color-rose){% endif %} {{ result.confidence }}%, #e2e8f0 0deg);">
+                    <div class="gauge-inner">
+                        <span class="gauge-value">{{ result.confidence }}%</span>
+                        <span class="gauge-label">Confidence</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ─── Enhanced Result Meta-Info Grid ─── -->
+            <div class="result-meta-grid">
+                <div class="result-meta-item">
+                    <div class="meta-label">Prediction</div>
+                    <div class="meta-value">
+                        {% if result.is_approved %}
+                        <span style="color: var(--color-emerald);">✅ Approved</span>
+                        {% else %}
+                        <span style="color: var(--color-rose);">🛑 Rejected</span>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="result-meta-item">
+                    <div class="meta-label">Confidence</div>
+                    <div class="meta-value">{{ result.confidence }}%</div>
+                </div>
+                <div class="result-meta-item">
+                    <div class="meta-label">P(Reject) — Risk Probability</div>
+                    <div class="meta-value">{{ (prob_reject * 100) | round(2) }}%</div>
+                </div>
+                <div class="result-meta-item">
+                    <div class="meta-label">Model Used</div>
+                    <div class="meta-value">Random Forest</div>
+                </div>
+                <div class="result-meta-item" style="grid-column: 1 / -1;">
+                    <div class="meta-label">Risk Level</div>
+                    <div class="meta-value">
+                        <span class="risk-badge risk-{{ risk_level | lower }}">{{ risk_level }}</span>
+                        <span style="font-size:0.8rem; color: var(--color-text-muted); margin-left: 0.5rem;">
+                            {% if risk_level == 'LOW' %}P(reject) &lt; 10% — very low default risk{% endif %}
+                            {% if risk_level == 'MODERATE' %}P(reject) 10–35% — moderate risk, proceed with caution{%
+                            endif %}
+                            {% if risk_level == 'HIGH' %}P(reject) &gt; 35% — elevated default risk{% endif %}
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <!-- ─────────────────────────────────────── -->
+
+            <p class="result-desc">
+                {% if result.is_approved %}
+                Congratulations! This applicant profile strongly matches successful account holders.
+                {% else %}
+                Unfortunately, this profile has been flagged as high risk by our predictive model.
+                {% endif %}
+            </p>
+        </div>
+
+        {% if shap_image %}
+        <div class="shap-card fade-in-up delay-1" id="shap-local-section">
+            <h3>Applicant-Specific Explanation (SHAP)</h3>
+            <p class="section-subtext">This waterfall chart shows how each input feature pushed the model's
+                decision <strong>away from</strong> the base approval rate toward the final outcome for this specific
+                applicant.</p>
+            <div class="shap-img-wrapper">
+                <img id="shap-waterfall-img" src="{{ url_for('static', filename=shap_image) }}" class="shap-plot"
+                    alt="SHAP waterfall explanation for this prediction"
+                    style="max-width:100%; border-radius:8px; box-shadow:0 2px 12px rgba(0,0,0,0.1);">
+            </div>
+            <p class="section-subtext" style="font-size:0.75rem; margin-top:0.5rem; color:var(--color-text-muted);">
+                Red bars push toward <em>Rejected</em>; blue bars push toward <em>Approved</em>.
+                Feature values shown on the right reflect the pre-scaled applicant inputs.
+            </p>
+        </div>
+        <script>
+            // Cache-bust on each page load so the latest prediction's plot always shows
+            (function () {
+                var img = document.getElementById('shap-waterfall-img');
+                if (img) img.src = img.src + '?t=' + Date.now();
+            })();
+        </script>
+        {% endif %}
+
+        {% if metadata and metadata.get('feature_importances') %}
+        <div class="key-factors fade-in-up delay-2">
+            <h3>Key Decision Factors</h3>
+            <p class="section-subtext">The most influential raw features considered for this prediction:</p>
+
+            <div class="factor-list">
+                {% for feat, imp in metadata.feature_importances.items() %}
+                <div class="factor-item">
+                    <div class="factor-label-row">
+                        <span class="factor-name">{{ feat }}</span>
+                        <span class="factor-val">{{ (imp * 100)|round(1) }}%</span>
+                    </div>
+                    <div class="factor-bar-bg">
+                        <div class="factor-bar-fill" style="width: {{ imp * 100 }}%;"></div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="shap-card fade-in-up delay-3">
+            <h3>Global Model SHAP Summary</h3>
+            <p class="section-subtext">Features leading to credit approvals (left) and credit rejections (right) across
+                all cohort data.</p>
+            <div class="shap-img-wrapper">
+                <img src="{{ url_for('static', filename='images/shap_summary.png') }}" class="shap-plot"
+                    alt="Global SHAP Summary Plot">
+            </div>
+        </div>
+
+        <div class="nav-actions">
+            <a href="/" class="btn-secondary">← Back to New Application</a>
+        </div>
+
+        <footer class="site-footer">
+            <strong>CreditPredict &copy; 2026</strong>
+            <div class="footer-tech">Built with Python, Flask, Scikit-learn, XGBoost, SHAP, Bootstrap 5</div>
+        </footer>
+    </div>
+</body>
+
+</html>

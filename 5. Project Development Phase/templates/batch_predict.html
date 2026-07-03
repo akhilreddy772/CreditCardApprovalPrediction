@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Batch Prediction - Credit Predict</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <div class="container fade-in-up">
+        <!-- Navigation bar -->
+        <nav class="navbar">
+            <div class="nav-container">
+                <a href="/" class="nav-brand">💳 CreditPredict</a>
+                <div class="nav-links">
+                    <a href="/" class="nav-link">Home</a>
+                    <a href="/dashboard" class="nav-link">Dashboard</a>
+                    <a href="/batch-predict" class="nav-link active">Batch Predict</a>
+                    <a href="/model-comparison" class="nav-link">Model Comparison</a>
+                </div>
+            </div>
+        </nav>
+
+        <div class="header">
+            <h1>Batch Decision Evaluation</h1>
+            <p>Upload a CSV file containing applicant features mapping to the 16 model inputs to get decisions
+                instantly.</p>
+        </div>
+
+        <div class="form-section">
+            <h2>Upload Applicants Dataset</h2>
+            {% if error %}
+            <div class="alert alert-error">{{ error }}</div>
+            {% endif %}
+            {% if success %}
+            <div class="alert alert-success">Batch predictions evaluated successfully!</div>
+            {% endif %}
+
+            <form action="/batch-predict" method="POST" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="csv_file">Select CSV Dataset File</label>
+                    <input type="file" id="csv_file" name="csv_file" accept=".csv" class="form-file" required>
+                </div>
+                <div class="form-actions" style="text-align: left; margin-top: 1rem;">
+                    <button type="submit" class="btn-primary-inline">Run Prediction Pipeline</button>
+                </div>
+            </form>
+        </div>
+
+        {% if results %}
+        <div class="form-section mt-4">
+            <div
+                style="display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid var(--color-border); padding-bottom: 0.5rem; margin-bottom: 1rem;">
+                <h2>Prediction Results (Top 100 shown)</h2>
+                <a href="{{ url_for('static', filename='batch_results.csv') }}" download class="btn-primary-inline"
+                    style="background-color: var(--color-emerald);">⬇ Download Results as CSV</a>
+            </div>
+
+            <div class="table-wrapper">
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Record ID</th>
+                            <th>Prediction Decision</th>
+                            <th>Model Confidence</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for row in results[:100] %}
+                        <tr class="{% if row.is_approved %}approved-row{% else %}rejected-row{% endif %}">
+                            <td>#{{ row.ID }}</td>
+                            <td>
+                                {% if row.is_approved %}
+                                <span style="color: var(--color-emerald); font-weight: 600;">🎉 Approved</span>
+                                {% else %}
+                                <span style="color: var(--color-rose); font-weight: 600;">🛑 Rejected</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ row.confidence }}%</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% if results|length > 100 %}
+            <p class="text-center" style="color: var(--color-text-muted); font-size: 0.9rem;">... and {{ results|length
+                - 100 }} more rows. Download the full CSV above to view all predictions.</p>
+            {% endif %}
+        </div>
+        {% endif %}
+
+        <div class="nav-actions mt-4">
+            <a href="/" class="btn-secondary">← Back to Home</a>
+        </div>
+
+        <footer class="site-footer">
+            <strong>CreditPredict &copy; 2026</strong>
+            <div class="footer-tech">Built with Python, Flask, Scikit-learn, XGBoost, SHAP, Bootstrap 5</div>
+        </footer>
+    </div>
+</body>
+
+</html>
