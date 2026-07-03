@@ -21,6 +21,7 @@ app.register_blueprint(auth_bp)
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 
 @app.route('/', methods=['GET'])
+@app.route('/welcome', methods=['GET'])
 def welcome():
     """Render welcome page."""
     from flask import session, redirect, url_for, render_template
