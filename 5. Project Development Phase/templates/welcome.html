@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome - CreditPredict</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 70vh;
+            text-align: center;
+            background: linear-gradient(135deg, var(--color-bg), #eff6ff);
+            border-radius: 20px;
+            padding: 4rem 2rem;
+            margin-top: 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--color-border);
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            color: var(--color-slate-900);
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--color-text-muted);
+            max-width: 650px;
+            margin-bottom: 2.5rem;
+            line-height: 1.6;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .btn-large {
+            padding: 1rem 2.5rem;
+            font-size: 1.1rem;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container fade-in-up">
+        <nav class="navbar">
+            <div class="nav-container">
+                <a href="/" class="nav-brand">💳 CreditPredict</a>
+            </div>
+        </nav>
+
+        <div class="hero fade-in-up delay-1">
+            <h1>AI-Powered Credit Card Approval Prediction System</h1>
+            <p>Securely predict credit card approval using state-of-the-art Machine Learning models. Create an account
+                to access the dashboard, model comparison, and real-time prediction engine.</p>
+
+            <div class="auth-buttons">
+                <a href="{{ url_for('auth.signup') }}" class="btn-primary btn-large">Create Account</a>
+                <a href="{{ url_for('auth.login') }}" class="btn-secondary btn-large">Login</a>
+            </div>
+        </div>
+
+        <footer class="site-footer" style="margin-top: 2rem;">
+            <strong>CreditPredict &copy; 2026</strong>
+            <div class="footer-tech">Built with Python, Flask, Scikit-learn, XGBoost, SHAP, Bootstrap 5</div>
+        </footer>
+    </div>
+</body>
+
+</html>

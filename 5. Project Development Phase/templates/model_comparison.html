@@ -20,6 +20,17 @@
                     <a href="/dashboard" class="nav-link">Dashboard</a>
                     <a href="/batch-predict" class="nav-link">Batch Predict</a>
                     <a href="/model-comparison" class="nav-link active">Model Comparison</a>
+                    <div class="dropdown">
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false"
+                            style="color: var(--color-primary); font-weight: 700;">👤 {{ session.get('fullname',
+                            session.get('username', 'Profile')) }} ▾</a>
+                        <div class="dropdown-menu">
+                            <a href="#" class="dropdown-item">Profile</a>
+                            <a href="#" class="dropdown-item">Settings</a>
+                            <div class="dropdown-divider"></div>
+                            <a href="{{ url_for('auth.logout') }}" class="dropdown-item text-danger">Logout</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </nav>
@@ -105,6 +116,6 @@
             <div class="footer-tech">Built with Python, Flask, Scikit-learn, XGBoost, SHAP, Bootstrap 5</div>
         </footer>
     </div>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>

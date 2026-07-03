@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - CreditPredict</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .auth-form-container {
+            max-width: 450px;
+            margin: 4rem auto;
+            background: #fff;
+            padding: 2.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--color-border);
+        }
+
+        .auth-form-container h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--color-slate-900);
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .alert-error {
+            background-color: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #f87171;
+        }
+
+        .alert-success {
+            background-color: #d1fae5;
+            color: #065f46;
+            border: 1px solid #34d399;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 12px;
+            top: 40px;
+            cursor: pointer;
+            color: var(--color-text-muted);
+            font-size: 0.9rem;
+            user-select: none;
+        }
+
+        .password-wrapper {
+            position: relative;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--color-border);
+            border-radius: 8px;
+            font-family: inherit;
+            margin-top: 0.25rem;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container fade-in-up">
+        <nav class="navbar">
+            <div class="nav-container">
+                <a href="{{ url_for('auth.welcome') }}" class="nav-brand">💳 CreditPredict</a>
+            </div>
+        </nav>
+
+        <div class="auth-form-container fade-in-up delay-1">
+            <h2>Welcome Back</h2>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+            {% for category, message in messages %}
+            <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+
+            <form action="{{ url_for('auth.login') }}" method="POST">
+                <div class="form-group">
+                    <label>Username or Email</label>
+                    <input type="text" name="identifier" required placeholder="Enter username or email"
+                        class="form-control">
+                </div>
+
+                <div class="form-group password-wrapper">
+                    <label>Password</label>
+                    <input type="password" name="password" id="password" required placeholder="Enter your password"
+                        class="form-control">
+                    <span class="toggle-password" onclick="togglePassword('password')">Show</span>
+                </div>
+
+                <div class="form-group"
+                    style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
+                    <label style="display: flex; align-items: center; gap: 8px; font-weight: normal; margin-bottom: 0;">
+                        <input type="checkbox" name="remember" style="width: auto;"> Remember Me
+                    </label>
+                    <a href="{{ url_for('auth.forgot_password') }}"
+                        style="font-size: 0.9rem; color: var(--color-primary); text-decoration: none;">Forgot
+                        Password?</a>
+                </div>
+
+                <button type="submit" class="btn-primary" style="width: 100%; margin-top: 1.5rem;">Login</button>
+            </form>
+
+            <p style="text-align: center; margin-top: 1.5rem; font-size: 0.95rem;">
+                Don't have an account? <a href="{{ url_for('auth.signup') }}"
+                    style="color: var(--color-primary); font-weight: 500;">Create one here</a>.
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function togglePassword(inputId) {
+            const input = document.getElementById(inputId);
+            const toggle = input.nextElementSibling;
+            if (input.type === 'password') {
+                input.type = 'text';
+                toggle.textContent = 'Hide';
+            } else {
+                input.type = 'password';
+                toggle.textContent = 'Show';
+            }
+        }
+    </script>
+</body>
+
+</html>

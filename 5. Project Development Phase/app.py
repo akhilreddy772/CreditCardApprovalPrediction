@@ -1,15 +1,27 @@
-# pyrefly: ignore [missing-import]
-from flask import Flask, render_template, request, jsonify, Response, send_file
-import io
+from flask import Flask, render_template, request, jsonify
 import pandas as pd
 import json
 import logging
+import os
 from predict import get_prediction, get_shap_explanation
+from auth import auth_bp, login_required
+from database import init_db
 
 app = Flask(__name__)
+# Initialize the sqlite database
+init_db()
+
+from datetime import timedelta
+
+# Provide a secure secret key for flask sessions out-of-the-box or via environment
+app.secret_key = os.environ.get('SECRET_KEY', 'creditpredict-super-secret-key-321')
+app.permanent_session_lifetime = timedelta(days=7)
+app.register_blueprint(auth_bp)
+
 logging.basicConfig(level=logging.INFO, format="%(levelname)s: %(message)s")
 
 @app.route('/', methods=['GET'])
+@login_required
 def index():
     """Render landing page."""
     import json
@@ -28,11 +40,13 @@ def index():
     return render_template('index.html', metadata=metadata)
 
 @app.route('/about', methods=['GET'])
+@login_required
 def about():
     """Render about page."""
     return render_template('about.html')
 
 @app.route('/predict', methods=['POST'])
+@login_required
 def predict_route():
     try:
         form_data = dict(request.form)
@@ -84,6 +98,7 @@ def predict_route():
         return render_template('404.html', error="Internal Server Execution Error")
 
 @app.route('/dashboard', methods=['GET'])
+@login_required
 def dashboard():
     import json, os
     dash_meta = {
@@ -109,6 +124,7 @@ def dashboard():
     return render_template('dashboard.html', dash_meta=dash_meta)
     
 @app.route('/model-comparison', methods=['GET'])
+@login_required
 def model_comparison():
     return render_template('model_comparison.html')
 
@@ -140,6 +156,7 @@ def api_predict():
         return jsonify({'status': 'error', 'message': str(e)}), 500
 
 @app.route('/batch-predict', methods=['GET', 'POST'])
+@login_required
 def batch_predict():
     if request.method == 'GET':
         return render_template('batch_predict.html')

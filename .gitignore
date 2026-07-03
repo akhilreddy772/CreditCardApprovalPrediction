@@ -12,3 +12,12 @@ __pycache__/
 !models/*.pkl
 !models/*.json
 !dataset/*.csv
+
+# Security & Local Dev
+*.sqlite3
+*.db
+users.db
+.env
+.vscode/
+.ipynb_checkpoints/
+

@@ -794,3 +794,61 @@ button.btn-primary:hover {
     background: #FFE4E6;
     color: #991B1B;
 }
+
+/* Navbar Dropdown styling */
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-toggle {
+    cursor: pointer;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    right: 0;
+    background-color: var(--color-surface);
+    min-width: 160px;
+    box-shadow: var(--shadow-md);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--color-border);
+    z-index: 100;
+    margin-top: 0.5rem;
+    padding: 0.5rem 0;
+    overflow: hidden;
+}
+
+.dropdown-menu.show {
+    display: block;
+    animation: fadeInUp 0.2s ease forwards;
+}
+
+.dropdown-item {
+    color: var(--color-text-main);
+    padding: 0.75rem 1rem;
+    text-decoration: none;
+    display: block;
+    font-size: 0.95rem;
+    font-weight: 500;
+    transition: background 0.2s;
+}
+
+.dropdown-item:hover {
+    background-color: #F8FAFC;
+    color: var(--color-primary);
+}
+
+.dropdown-divider {
+    border-top: 1px solid var(--color-border);
+    margin: 0.25rem 0;
+}
+
+.text-danger {
+    color: var(--color-rose) !important;
+}
+
+.text-danger:hover {
+    color: #E11D48 !important;
+}
