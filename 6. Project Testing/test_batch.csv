@@ -1,4 +1,0 @@
-CODE_GENDER,FLAG_OWN_CAR,FLAG_OWN_REALTY,CNT_CHILDREN,AMT_INCOME_TOTAL,NAME_INCOME_TYPE,NAME_EDUCATION_TYPE,NAME_FAMILY_STATUS,NAME_HOUSING_TYPE,FLAG_WORK_PHONE,FLAG_PHONE,FLAG_EMAIL,OCCUPATION_TYPE,CNT_FAM_MEMBERS,AGE,YEARS_EMPLOYED
-M,Y,Y,0,180000.0,Working,Higher education,Married,House / apartment,0,1,0,Managers,2,35,5
-F,N,Y,0,216000.0,Pensioner,Secondary / secondary special,Widow,House / apartment,0,0,0,Unknown,1,54,0
-M,Y,Y,2,250000.0,Commercial associate,Higher education,Married,House / apartment,1,1,1,Core staff,4,40,10

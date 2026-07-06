@@ -1,5 +1,0 @@
-Case A (Young, rent): P(Reject)=0.0359, Decision=Approved
-Case B (Pensioner, owns realty): P(Reject)=0.0125, Decision=Approved
-Case C (Mid-career secure): P(Reject)=0.0237, Decision=Approved
-Case D (Young entry-level): P(Reject)=0.0875, Decision=Approved
-Case E (Executive wealth): P(Reject)=0.0109, Decision=Approved
